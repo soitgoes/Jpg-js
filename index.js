@@ -12,7 +12,8 @@ class Image{
             this.data = img.data;
         }
     }
-    resize(width,height){
+    resize(width){
+	var height = Math.trunc(this.height / this.width * width)
         const gapw = this.width / width;
         const gaph = this.height / height;
         const tempData = new Buffer.alloc(width*height*4);
@@ -153,6 +154,14 @@ function open(filename) {
     const img = new Image(filename);
     return img;
 }
+function openBuffer(buffer){
+const img = new Image();
+const data = decode(buffer);
+            img.height = data.height;
+            img.width = data.width;
+            img.data = data.data;
+return img;
+}
 
 function fromarray(data,width,height){
     if(data && width && height){
@@ -165,4 +174,4 @@ function fromarray(data,width,height){
     throw new Error("Object should contain height,width,data!!")
 }
 
-module.exports = {open,fromarray};
+module.exports = {openBuffer, open,fromarray};
